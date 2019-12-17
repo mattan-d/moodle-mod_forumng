@@ -1305,7 +1305,7 @@ WHERE
         }
         $transaction = $DB->start_delegated_transaction();
         $newdiscussionid =  $DB->insert_record('forumng_discussions', $discussionobj);
-        $rs = $DB->get_recordset('forumng_posts', array('discussionid' => $this->get_id()));
+        $rs = $DB->get_recordset('forumng_posts', array('discussionid' => $this->get_id()), 'id ASC');
         // $newids and $parentused are temp arrays used to
         // $newids is a array of new postids using the indices of its old postids
         // Update the parentid of the post records copied over
@@ -2503,7 +2503,7 @@ WHERE
         // Print link back to discussion list
         print '<div id="forumng-arrowback">' .
             link_arrow_left($this->get_forum()->get_name(),
-                'view.php?' . $this->get_forum()->get_link_params(mod_forumng::PARAM_HTML)) .
+                'view.php?' . $this->get_forum()->get_link_params(mod_forumng::PARAM_PLAIN)) .
                  '</div>';
     }
 

@@ -412,7 +412,7 @@ function forumng_get_completion_state($course, $cm, $userid, $type) {
 function forumng_user_outline($course, $user, $mod, $forum) {
     require_once(dirname(__FILE__).'/mod_forumng.php');
     if ($posts = mod_forumng::get_user_activityreport($forum->id, $user->id)) {
-        $result = new object();
+        $result = new stdClass();
         $result->info = get_string("numposts", "forumng", $posts->postcount);
         $result->time = $posts->lastpost;
         return $result;
@@ -460,7 +460,7 @@ function mod_forumng_pluginfile($course, $cm, $context, $filearea, $args, $force
         send_file_not_found();
     }
     list ($itemid, $filename) = $args;
-    $filename = urldecode($filename);
+    $filename = rawurldecode($filename);
 
     if ($filearea == 'attachment' || $filearea == 'message') {
         // Get post object and check permissions.

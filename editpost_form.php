@@ -40,6 +40,7 @@ class mod_forumng_editpost_form extends moodleform {
             'toolbaroption' => '',
             'emailauthor' => true,
         );
+        $allowemptymsg = is_a($forum->get_type(), 'forumngtype_ipud');
         $attorowheight = (!empty($this->_customdata['attorowheight'])) ? $this->_customdata['attorowheight'] : 10;
         $edit = $this->_customdata['edit'];
         $isdiscussion = $this->_customdata['isdiscussion'];
@@ -144,8 +145,10 @@ class mod_forumng_editpost_form extends moodleform {
                     $editorattributes, $editoroptions);
             }
             $mform->setType('message', PARAM_RAW);
-            $mform->addRule('message', get_string('required'),
-                'required', null, 'client');
+            if (!$allowemptymsg) {
+                $mform->addRule('message', get_string('required'),
+                        'required', null, 'client');
+            }
 
             // If you can create attachments...
             if ($forum->can_create_attachments() && !empty($replyoptions['attachments'])) {
@@ -167,6 +170,9 @@ class mod_forumng_editpost_form extends moodleform {
             if (($forum->can_post_anonymously() || $forum->can_indicate_moderator()) && !empty($replyoptions['postas'])) {
                 $options=array();
                 $options[mod_forumng::ASMODERATOR_NO] = get_string('asmoderator_post', 'forumng');
+                if ($forum->get_can_post_anon() == mod_forumng::CANPOSTATON_NONMODERATOR) {
+                    $options[mod_forumng::ASMODERATOR_NO] = get_string('asmoderator_post_anon', 'forumng');
+                }
                 if ($forum->can_indicate_moderator()) {
                     $options[mod_forumng::ASMODERATOR_IDENTIFY] = get_string('asmoderator_self', 'forumng');
                 }

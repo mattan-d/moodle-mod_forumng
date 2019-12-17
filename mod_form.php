@@ -115,7 +115,7 @@ class mod_forumng_mod_form extends moodleform_mod {
         $mform->addRule('reportingemail',
                 get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('reportingemail', 'reportingemail', 'forumng');
-        $mform->addElement('checkbox', 'canpostanon', get_string('canpostanon', 'forumng'));
+        $mform->addElement('select', 'canpostanon', get_string('canpostanon', 'forumng'), mod_forumng::get_canpostanon_options());
         $mform->addHelpButton('canpostanon', 'canpostanon', 'forumng');
         // Atom/RSS feed on/off/discussions-only.
         if ($CFG->enablerssfeeds && !empty($CFG->forumng_enablerssfeeds)) {
@@ -382,6 +382,18 @@ class mod_forumng_mod_form extends moodleform_mod {
             if (($data['grading'] > 0 && $data['grading'] < 6) && (empty($data['enableratings']))) {
                 // If grading between 1 and 5 (not = 6 and not = 0) and enableratings is empty (not checked).
                 $errors['enableratings'] = get_string('error_ratingrequired', 'forumng');
+            }
+        }
+
+        if (!empty($data['postingfrom']) && !empty($data['postinguntil'])) {
+            if ($data['postingfrom'] >= $data['postinguntil']) {
+                $errors['postinguntil'] = get_string('timestartenderror', 'forumng');
+            }
+        }
+
+        if (!empty($data['ratingfrom']) && !empty($data['ratinguntil'])) {
+            if ($data['ratingfrom'] >= $data['ratinguntil']) {
+                $errors['ratinguntil'] = get_string('timestartenderror', 'forumng');
             }
         }
 
