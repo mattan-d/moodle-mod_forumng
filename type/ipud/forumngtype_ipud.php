@@ -55,7 +55,7 @@ class forumngtype_ipud extends forumngtype_general {
      */
     public function can_post($forum, &$whynot, $userid=0) {
         $whynot = 'error_new_discussion_ipud';
-        return false;
+        return true; // !! MOFET CORE !!
     }
 
     /**
